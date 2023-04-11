@@ -64,11 +64,11 @@ func handler(w http.ResponseWriter, r *http.Request) {
 }
 
 func connectToCloudSQL() (*sql.DB, error) {
-	connectionName := os.Getenv("CLOUD_SQL_CONNECTION_NAME")
+	connectionName := os.Getenv("INSTANCE_CONNECTION_NAME")
 	dbName := os.Getenv("DB_NAME")
 	dbUser := os.Getenv("DB_USER")
-	dbPassword := os.Getenv("DB_PASSWORD")
-	dbHost := os.Getenv("DB_HOST")
+	dbPassword := os.Getenv("DB_PASS")
+	dbHost := os.Getenv("INSTANCE_HOST")
 	dbPort := os.Getenv("DB_PORT")
 
 	dsn := fmt.Sprintf("host=/cloudsql/%s dbname=%s user=%s password=%s sslmode=disable", connectionName, dbName, dbUser, dbPassword)
