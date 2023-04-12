@@ -70,6 +70,12 @@ func connectToCloudSQL() (*sql.DB, error) {
 	dbPassword := os.Getenv("DB_PASS")
 	dbHost := os.Getenv("INSTANCE_HOST")
 	dbPort := os.Getenv("DB_PORT")
+	fmt.Print(connectionName)
+	fmt.Print(dbName)
+	fmt.Print(dbUser)
+	fmt.Print(dbPassword)
+	fmt.Print(dbHost)
+	fmt.Print(dbPort)
 
 	dsn := fmt.Sprintf("host=/cloudsql/%s dbname=%s user=%s password=%s sslmode=disable", connectionName, dbName, dbUser, dbPassword)
 	if dbHost != "" && dbPort != "" {
