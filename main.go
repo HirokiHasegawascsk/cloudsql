@@ -64,33 +64,28 @@ func handler(w http.ResponseWriter, r *http.Request) {
 }
 
 func connectToCloudSQL() (*sql.DB, error) {
-	connectionName := os.Getenv("INSTANCE_CONNECTION_NAME")
-	dbName := os.Getenv("DB_NAME")
-	dbUser := os.Getenv("DB_USER")
-	dbPassword := os.Getenv("DB_PASS")
-	dbHost := os.Getenv("INSTANCE_HOST")
-	dbPort := os.Getenv("DB_PORT")
-	fmt.Print(connectionName)
-	fmt.Print(dbName)
-	fmt.Print(dbUser)
-	fmt.Print(dbPassword)
-	fmt.Print(dbHost)
-	fmt.Print(dbPort)
-
-	dsn := fmt.Sprintf("host=/cloudsql/%s dbname=%s user=%s password=%s sslmode=disable", connectionName, dbName, dbUser, dbPassword)
-	if dbHost != "" && dbPort != "" {
-		dsn = fmt.Sprintf("host=%s port=%s %s", dbHost, dbPort, dsn)
+	mustGetenv := func(k string) string {
+		v := os.Getenv(k)
+		if v == "" {
+			log.Fatalf("Fatal Error in connect_tcp.go: %s environment variable not set.", k)
+		}
+		return v
 	}
-	db, err := sql.Open("postgres", dsn)
+	var (
+		dbUser     = mustGetenv("DB_USER")       // e.g. 'my-db-user'
+		dbPassword = mustGetenv("DB_PASS")       // e.g. 'my-db-password'
+		dbHost     = mustGetenv("INSTANCE_HOST") // e.g. '127.0.0.1' ('172.17.0.1' if deployed to GAE Flex)
+		dbPort     = mustGetenv("DB_PORT")       // e.g. '5432'
+		dbName     = mustGetenv("DB_NAME")       // e.g. 'my-database'
+	)
+	dbURI := fmt.Sprintf("host=%s user=%s password=%s port=%s database=%s",
+		dbHost, dbUser, dbPassword, dbPort, dbName)
+
+	dbPool, err := sql.Open("pgx", dbURI)
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf("sql.Open: %v", err)
 	}
-
-	if err := db.Ping(); err != nil {
-		return nil, err
-	}
-
-	return db, nil
+	return dbPool, nil
 }
 
 /*
