@@ -6,13 +6,8 @@ import (
 	"log"
 	"net/http"
 	"os"
-	// Note: If connecting using the App Engine Flex Go runtime, use
-	// "github.com/jackc/pgx/stdlib" instead, since v4 requires
-	// Go modules which are not supported by App Engine Flex.
 )
 
-// connectTCPSocket initializes a TCP connection pool for a Cloud SQL
-// instance of Postgres.
 func main() {
 	log.Print("starting server...")
 	http.HandleFunc("/", handler)
@@ -32,16 +27,19 @@ func handler(w http.ResponseWriter, r *http.Request) {
 		db  *sql.DB
 		err error
 	)
+
+	fmt.Fprint(w, os.Getenv("INSTANCE_HOST"))
+
 	if os.Getenv("INSTANCE_HOST") != "" {
 		db, err = connectTCPSocket()
 		if err != nil {
 			fmt.Fprint(w, "connectTCPSocket: unable to connect")
 		}
+		fmt.Fprint(w, "Connected to Cloud SQL successfully!")
 	}
 	if db == nil {
 		fmt.Fprint(w, "Missing database connection type. Please define one of INSTANCE_HOST, INSTANCE_UNIX_SOCKET, or INSTANCE_CONNECTION_NAME")
 	}
-	fmt.Fprint(w, "Connected to Cloud SQL successfully!")
 }
 
 func connectTCPSocket() (*sql.DB, error) {
