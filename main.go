@@ -6,6 +6,8 @@ import (
 	"log"
 	"net/http"
 	"os"
+
+	_ "github.com/jackc/pgx/v4/stdlib"
 )
 
 func main() {
