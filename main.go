@@ -16,15 +16,11 @@ import (
 func main() {
 	log.Print("starting server...")
 	http.HandleFunc("/", handler)
-
-	// Determine port for HTTP service.
 	port := os.Getenv("PORT")
 	if port == "" {
 		port = "8080"
 		log.Printf("defaulting to port %s", port)
 	}
-
-	// Start HTTP server.
 	log.Printf("listening on port %s", port)
 	if err := http.ListenAndServe(":"+port, nil); err != nil {
 		log.Fatal(err)
@@ -32,19 +28,20 @@ func main() {
 }
 
 func handler(w http.ResponseWriter, r *http.Request) {
-	db, err := connectTCPSocket()
-	if err != nil {
-		w.WriteHeader(http.StatusInternalServerError)
-		fmt.Fprint(w, "Failed to connect to Cloud SQL")
-		return
+	var (
+		db  *sql.DB
+		err error
+	)
+	if os.Getenv("INSTANCE_HOST") != "" {
+		db, err = connectTCPSocket()
+		if err != nil {
+			fmt.Fprint(w, "connectTCPSocket: unable to connect")
+		}
 	}
-	defer db.Close()
+	if db == nil {
+		fmt.Fprint(w, "Missing database connection type. Please define one of INSTANCE_HOST, INSTANCE_UNIX_SOCKET, or INSTANCE_CONNECTION_NAME")
+	}
 	fmt.Fprint(w, "Connected to Cloud SQL successfully!")
-	name := os.Getenv("NAME")
-	if name == "" {
-		name = "Cloud SQL "
-	}
-	fmt.Fprintf(w, "Hello %s!\n", name)
 }
 
 func connectTCPSocket() (*sql.DB, error) {
@@ -55,28 +52,20 @@ func connectTCPSocket() (*sql.DB, error) {
 		}
 		return v
 	}
-	// Note: Saving credentials in environment variables is convenient, but not
-	// secure - consider a more secure solution such as
-	// Cloud Secret Manager (https://cloud.google.com/secret-manager) to help
-	// keep secrets safe.
 	var (
-		dbUser    = mustGetenv("DB_USER")       // e.g. 'my-db-user'
-		dbPwd     = mustGetenv("DB_PASS")       // e.g. 'my-db-password'
-		dbTCPHost = mustGetenv("INSTANCE_HOST") // e.g. '127.0.0.1' ('172.17.0.1' if deployed to GAE Flex)
-		dbPort    = mustGetenv("DB_PORT")       // e.g. '5432'
-		dbName    = mustGetenv("DB_NAME")       // e.g. 'my-database'
+		dbUser    = mustGetenv("DB_USER")
+		dbPwd     = mustGetenv("DB_PASS")
+		dbTCPHost = mustGetenv("INSTANCE_HOST")
+		dbPort    = mustGetenv("DB_PORT")
+		dbName    = mustGetenv("DB_NAME")
 	)
 
 	dbURI := fmt.Sprintf("host=%s user=%s password=%s port=%s database=%s",
 		dbTCPHost, dbUser, dbPwd, dbPort, dbName)
 
-	// dbPool is the pool of database connections.
 	dbPool, err := sql.Open("pgx", dbURI)
 	if err != nil {
 		return nil, fmt.Errorf("sql.Open: %v", err)
 	}
-
-	// ...
-
 	return dbPool, nil
 }
