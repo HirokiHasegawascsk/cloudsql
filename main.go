@@ -30,6 +30,8 @@ func handler(w http.ResponseWriter, r *http.Request) {
 
 	if os.Getenv("INSTANCE_HOST") != "" {
 		db, err = connectTCPSocket()
+		fmt.Fprint(w, db)
+		fmt.Fprint(w, err)
 		if err != nil {
 			fmt.Fprint(w, "connectTCPSocket: unable to connect")
 		}
