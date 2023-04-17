@@ -28,17 +28,15 @@ func handler(w http.ResponseWriter, r *http.Request) {
 		err error
 	)
 
-	fmt.Fprint(w, os.Getenv("INSTANCE_HOST"))
-
 	if os.Getenv("INSTANCE_HOST") != "" {
 		db, err = connectTCPSocket()
 		if err != nil {
 			fmt.Fprint(w, "connectTCPSocket: unable to connect")
 		}
+		if db == nil {
+			fmt.Fprint(w, "Missing database connection type. Please define one of INSTANCE_HOST, INSTANCE_UNIX_SOCKET, or INSTANCE_CONNECTION_NAME")
+		}
 		fmt.Fprint(w, "Connected to Cloud SQL successfully!")
-	}
-	if db == nil {
-		fmt.Fprint(w, "Missing database connection type. Please define one of INSTANCE_HOST, INSTANCE_UNIX_SOCKET, or INSTANCE_CONNECTION_NAME")
 	}
 }
 
