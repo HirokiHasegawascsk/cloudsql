@@ -3,11 +3,10 @@ package main
 import (
 	"database/sql"
 	"fmt"
+	"github.com/jackc/pgx/v4/stdlib"
 	"log"
 	"net/http"
 	"os"
-
-	_ "github.com/jackc/pgx/v4/stdlib"
 )
 
 func main() {
