@@ -1,22 +1,16 @@
-module github.com/jackc/pgx/v4
+module github.com/HirokiHasegawascsk/cloudsql
 
 go 1.20
 
 require (
-	github.com/Masterminds/semver/v3 v3.1.1
-	github.com/cockroachdb/apd v1.1.0
-	github.com/go-kit/log v0.1.0
-	github.com/gofrs/uuid v4.0.0+incompatible
-	github.com/jackc/pgconn v1.14.0
-	github.com/jackc/pgio v1.0.0
-	github.com/jackc/pgproto3/v2 v2.3.2
-	github.com/jackc/pgtype v1.14.0
-	github.com/jackc/pgx/v5 v5.3.1 // indirect
-	github.com/jackc/puddle v1.3.0
-	github.com/rs/zerolog v1.15.0
-	github.com/shopspring/decimal v1.2.0
-	github.com/sirupsen/logrus v1.4.2
-	github.com/stretchr/testify v1.8.1
-	go.uber.org/zap v1.13.0
-	gopkg.in/inconshreveable/log15.v2 v2.0.0-20180818164646-67afb5ed74ec
+	github.com/jackc/chunkreader/v2 v2.0.1 // indirect
+	github.com/jackc/pgconn v1.14.0 // indirect
+	github.com/jackc/pgio v1.0.0 // indirect
+	github.com/jackc/pgpassfile v1.0.0 // indirect
+	github.com/jackc/pgproto3/v2 v2.3.2 // indirect
+	github.com/jackc/pgservicefile v0.0.0-20221227161230-091c0ba34f0a // indirect
+	github.com/jackc/pgtype v1.14.0 // indirect
+	github.com/jackc/pgx/v4 v4.18.1 // indirect
+	golang.org/x/crypto v0.6.0 // indirect
+	golang.org/x/text v0.7.0 // indirect
 )
