@@ -1,6 +1,6 @@
 module github.com/jackc/pgx/v4
 
-go 1.13
+go 1.20
 
 require (
 	github.com/Masterminds/semver/v3 v3.1.1
