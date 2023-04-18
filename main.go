@@ -3,7 +3,7 @@ package main
 import (
 	"database/sql"
 	"fmt"
-	"github.com/jackc/pgx/v4/stdlib"
+	_ "github.com/jackc/pgx/v4/stdlib"
 	"log"
 	"net/http"
 	"os"
@@ -14,7 +14,7 @@ func main() {
 	http.HandleFunc("/", handler)
 	port := os.Getenv("PORT")
 	if port == "" {
-		port = "8080"
+		port = "80"
 		log.Printf("defaulting to port %s", port)
 	}
 	log.Printf("listening on port %s", port)
