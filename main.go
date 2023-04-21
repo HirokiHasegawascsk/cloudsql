@@ -58,6 +58,11 @@ func connectTCPSocket() (*sql.DB, error) {
 		dbPort    = mustGetenv("DB_PORT")
 		dbName    = mustGetenv("DB_NAME")
 	)
+	log.Printf("listening on port %s", dbUser)
+	log.Printf("listening on port %s", dbPwd)
+	log.Printf("listening on port %s", dbTCPHost)
+	log.Printf("listening on port %s", dbPort)
+	log.Printf("listening on port %s", dbName)
 
 	dbURI := fmt.Sprintf("host=%s user=%s password=%s port=%s database=%s",
 		dbTCPHost, dbUser, dbPwd, dbPort, dbName)
