@@ -3,7 +3,7 @@ package main
 import (
 	"database/sql"
 	"fmt"
-	"github.com/jackc/pgx/v4/stdlib"
+	_ "github.com/jackc/pgx/v4/stdlib"
 	"log"
 	"net/http"
 	"os"
@@ -35,6 +35,9 @@ func handler(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprint(w, err)
 		if err != nil {
 			fmt.Fprint(w, "connectTCPSocket: unable to connect")
+		}
+		if db == nil {
+			fmt.Fprint(w, "Missing database connection type. Please define one of INSTANCE_HOST, INSTANCE_UNIX_SOCKET, or INSTANCE_CONNECTION_NAME")
 		}
 		fmt.Fprint(w, "Connected to Cloud SQL successfully!")
 	}
