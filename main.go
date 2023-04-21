@@ -31,13 +31,8 @@ func handler(w http.ResponseWriter, r *http.Request) {
 
 	if os.Getenv("INSTANCE_HOST") != "" {
 		db, err = connectTCPSocket()
-		fmt.Fprint(w, db)
-		fmt.Fprint(w, err)
 		if err != nil {
 			fmt.Fprint(w, "connectTCPSocket: unable to connect")
-		}
-		if db == nil {
-			fmt.Fprint(w, "Missing database connection type. Please define one of INSTANCE_HOST, INSTANCE_UNIX_SOCKET, or INSTANCE_CONNECTION_NAME")
 		}
 		fmt.Fprint(w, "Connected to Cloud SQL successfully!")
 	}
@@ -63,8 +58,5 @@ func connectTCPSocket() (*sql.DB, error) {
 		dbTCPHost, dbUser, dbPwd, dbPort, dbName)
 
 	dbPool, err := sql.Open("pgx", dbURI)
-	if err != nil {
-		return nil, fmt.Errorf("sql.Open: %v", err)
-	}
-	return dbPool, nil
+	return dbPool, err
 }
