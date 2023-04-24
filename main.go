@@ -64,7 +64,7 @@ func connectTCPSocket() (*sql.DB, error) {
 	dbURI := fmt.Sprintf("host=%s user=%s password=%s port=%s database=%s",
 		dbTCPHost, dbUser, dbPwd, dbPort, dbName)
 
-	dbPool, err := sql.Open("pgx", dbURI)
+	dbPool, err := sql.Open("postgres", dbURI)
 	if err != nil {
 		return nil, fmt.Errorf("sql.Open: %v", err)
 	}
